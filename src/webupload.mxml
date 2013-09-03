@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" name="webuploadApp"
+			   width="740" height="400" backgroundColor="#A9A9A9"
+			   applicationComplete="applicationCompleteHandler(event)"
+			   >
+	<fx:Script>
+		<![CDATA[
+			import flash.errors.IOError;
+			import flash.events.*;
+			import flash.events.Event;
+			import flash.events.IOErrorEvent;
+			import flash.events.ProgressEvent;
+			import flash.net.FileReference;
+			import flash.net.FileReferenceList;
+			import flash.net.Socket;
+			import flash.trace.Trace;
+			import flash.utils.ByteArray;
+			
+			import mx.accessibility.AlertAccImpl;
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+//			import flash.system.se;
+			//variable
+			
+			//files
+			public var files: FileReferenceList = new FileReferenceList();
+			private var filesGrid:ArrayCollection = new ArrayCollection();
+			//ftp
+			var ftp_host:String="127.0.0.1";
+			var ftp_port:Number=21//or your ftp port;
+			var ftp_username:String="thanh";
+			var ftp_password:String="thanh";
+			private var s:Socket;
+					
+			protected function btn_chonfile_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace("Chọn file");
+				var txtFilter: FileFilter = new FileFilter("file document", "*.doc; *.pdf");
+				this.files.addEventListener(Event.SELECT,exFileSelect);
+				this.files.browse([txtFilter]);
+				trace("files: "+files.fileList.length);
+			}
+
+			protected function exFileSelect(e:Event):void{
+				trace("Xử lý thông tin file đã chọn");
+				var temp: FileReferenceList = e.currentTarget as FileReferenceList;
+				trace(temp.fileList.length);
+				filesGrid.removeAll();
+				var id:int = 1;
+				for each(var i:FileReference in temp.fileList){
+					filesGrid.addItem({id:id, name:i.name, ext:i.type, size:i.size});
+					id++;
+				}
+				docsGrid.dataProvider = filesGrid;
+			}
+			
+			protected function btn_upload_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				//Alert.show("file number: "+this.files.fileList.length);
+				//this.socket.addEventListener(ProgressEvent.SOCKET_DATA, onReturnData);
+				//this.socket.connect('127.0.0.1',21);
+			}
+
+			
+			protected function applicationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace("Application load complete");
+				//flash.system.Security.allowDomain("127.0.0.1");
+				flash.system.Security.loadPolicyFile("xmlsocket://127.0.0.1:21");
+				var s:Socket = new Socket("127.0.0.1",21);
+//				//s.connect();
+//				s.addEventListener(Event.CONNECT, onConnect);
+//				s.addEventListener(ProgressEvent.SOCKET_DATA, onDataReturn);
+//				s.writeUTFBytes("USER thanh\n");
+//				s.writeUTFBytes("PASS thanh\n");
+//				s.flush();
+				
+			}
+			
+			protected function onConnect(e:Event){
+				trace("Begin connect to FTP");
+//				s.writeUTFBytes("USER thanh\n");
+//				s.writeUTFBytes("PASS thanh\n");
+//				s.flush();
+			}
+
+			protected function onDataReturn(e:ProgressEvent){
+				trace("Data return");
+				var d = s.readUTFBytes(s.bytesAvailable);
+				trace(d);
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	<mx:ProgressBar label="Uploaded: 0%" id="pgb_upload" x="254" top="10" width="476">
+		
+	</mx:ProgressBar>
+	<s:Button id="btn_upload" x="84" y="10" width="84" label="Upload"
+			  click="btn_upload_clickHandler(event)"/>
+	<s:DataGrid id="docsGrid" x="10" y="39" width="720" height="352" selectionMode="multipleRows" requestedRowCount="4">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn width="50" dataField="id" headerText="STT"></s:GridColumn>
+				<s:GridColumn width="200" dataField="name" headerText="Tên file"></s:GridColumn>
+				<s:GridColumn width="100" dataField="type" headerText="Loại tài liệu"></s:GridColumn>
+				<s:GridColumn width="100" dataField="ext" headerText="Loại file"></s:GridColumn>
+				<s:GridColumn width="100" dataField="size" headerText="Size"></s:GridColumn>
+				<s:GridColumn  dataField="upload_status" headerText="Upload"></s:GridColumn>
+				
+			</s:ArrayList>
+		</s:columns>
+		<s:typicalItem>
+			<fx:Object dataField1="Sample Data" dataField2="Sample Data" dataField3="Sample Data"></fx:Object>
+		</s:typicalItem>
+	</s:DataGrid>
+	<s:Button id="btn_chonfile" x="10" y="10" label="Chọn file"
+			  click="btn_chonfile_clickHandler(event)"/>
+	<s:Button x="176" y="10" label="Hủy"/>
+</s:Application>

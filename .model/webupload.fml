@@ -1,0 +1,137 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="DocumentsService">
+    <annotation name="ActionScriptGeneration">
+      <item name="Source">DocumentsService</item>
+      <item name="ServiceType">RemoteObject</item>
+      <item name="Package">services.documentsservice</item>
+      <item name="Endpoint">gateway.php</item>
+      <item name="Destination">DocumentsService</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">PHP</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="PHP_RELATIVE_LOCATION">webupload-debug/services/DocumentsService.php</item>
+      <item name="PHP_SERVER_ROOT">C:\wamp\www</item>
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="PHP_SERVICES_FOLDER">C:\wamp\www\webupload-debug\services</item>
+      <item name="PHP_LOCATION">C:/wamp/www/webupload-debug/services/DocumentsService.php</item>
+      <item name="LINKED_FILE">DocumentsService.php</item>
+      <item name="PHP_SERVER_ROOT_URL">http://localhost/</item>
+      <item name="ABSOLUTE_ENDPOINT">http://localhost/webupload-debug/gateway.php</item>
+      <item name="PHP_CLASS_NAME">DocumentsService</item>
+    </annotation>
+    <function name="getAllDocuments" return-type="Documents[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getDocumentsByID" return-type="Documents">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="createDocuments" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Documents"/>
+    </function>
+    <function name="updateDocuments" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="item" type="Documents"/>
+    </function>
+    <function name="deleteDocuments" return-type="void">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="itemID" type="integer"/>
+    </function>
+    <function name="count" return-type="integer">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="getDocuments_paged" return-type="Documents[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">opaque,opaque</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="startIndex" type="integer"/>
+      <parameter name="numItems" type="integer"/>
+    </function>
+  </service>
+  <entity name="Documents" persistent="true">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">Documents</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">DocumentsService</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="DataManagement">
+      <item name="create">createDocuments</item>
+      <item name="update">updateDocuments</item>
+      <item name="get">getDocumentsByID</item>
+      <item name="delete">deleteDocuments</item>
+      <item name="fillFunc">getAllDocuments,getDocuments_paged</item>
+      <item name="managingService">DocumentsService</item>
+    </annotation>
+    <annotation name="getDocumentsByID">
+      <item name="propertySpecifier">ID,FILENAME,FILE_TYPE,LINK,ISPUBLIC,CATALOG_ID,DESCRIPTION</item>
+    </annotation>
+    <annotation name="getAllDocuments">
+      <item name="propertySpecifier">ID,FILENAME,FILE_TYPE,LINK,ISPUBLIC,CATALOG_ID,DESCRIPTION</item>
+    </annotation>
+    <annotation name="getDocuments_paged">
+      <item name="propertySpecifier">ID,FILENAME,FILE_TYPE,LINK,ISPUBLIC,CATALOG_ID,DESCRIPTION</item>
+      <item name="pagingEnabled">true</item>
+      <item name="positionalPagingParameters">true</item>
+      <item name="countOperation">count</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <id name="ID" type="integer"/>
+    <property name="FILENAME" type="string"/>
+    <property name="FILE_TYPE" type="string"/>
+    <property name="LINK" type="string"/>
+    <property name="ISPUBLIC" type="integer"/>
+    <property name="CATALOG_ID" type="integer"/>
+    <property name="DESCRIPTION" type="string"/>
+  </entity>
+</model>
